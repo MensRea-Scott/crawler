@@ -89,6 +89,7 @@ def main_dispatch():
     pass
 
 def parse_addr2(page_addr):
+    #this function tries to find out all urls without using beautifulsoup
     from urllib2 import urlopen, HTTPError
     import re
     try:
