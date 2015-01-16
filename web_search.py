@@ -18,6 +18,31 @@ page_queue = Queue.Queue()
 unread_page_queue=Queue.Queue()
 read_page = []
 
+def dispatcher(unread_page_queue):
+    url = unread_page_queue.get()
+    crawler(url)
+
+class crawler(object):
+    def __init__(self,tgt_url):
+        self.start_url = tgt_url
+
+    def open_url(self):
+        #import urllib2
+        try:
+            page=urllib2.urlopen(self.start_url)
+        except urllib2.HTTPError:
+            raise ValueError, 'invalid address'
+        return page
+
+    def parse_addr(self, page=self.open_url()):
+        #import re
+        pattern=re.compile(r'\<a href="(?P<addr>.*)"\>')
+        #(?P<addr>.*) means matching any number of any char (.*), and ref them as 'addr'
+        for i in re.finditer(pattern,page.lower()):
+            yield i.group('addr')
+        pass
+
+
 def init():
     original_addr = sites[0]
     page_queue.put(original_addr)
