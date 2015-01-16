@@ -32,15 +32,17 @@ class crawler(object):
             page=urllib2.urlopen(self.start_url)
         except urllib2.HTTPError:
             raise ValueError, 'invalid address'
-        return page
+        return page.read()
 
     def parse_addr(self, page=self.open_url()):
         #import re
         pattern=re.compile(r'\<a href="(?P<addr>.*)"\>')
         #(?P<addr>.*) means matching any number of any char (.*), and ref them as 'addr'
+        result=[]
         for i in re.finditer(pattern,page.lower()):
-            yield i.group('addr')
-        pass
+            result.append(i.group('addr'))
+
+        return result
 
 
 def init():
