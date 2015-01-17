@@ -26,7 +26,9 @@ class crawler(object):
     def __init__(self,tgt_url):
         self.start_url = tgt_url
 
-    def open_url(self):
+    def __open_url(self):
+#note 15/1/17: open_url and parse_addr are defined as private functions, therefore can only be accessed
+#from within the class. Also, to call private functions from within the class, one need to do self.__xxxx()
         #import urllib2
         try:
             page=urllib2.urlopen(self.start_url)
@@ -34,7 +36,7 @@ class crawler(object):
             raise ValueError, 'invalid address'
         return page.read()
 
-    def parse_addr(self, page=self.open_url()):
+    def __parse_addr(self, page=self.__open_url()):
         #import re
         pattern=re.compile(r'\<a href="(?P<addr>.*)"\>')
         #(?P<addr>.*) means matching any number of any char (.*), and ref them as 'addr'
@@ -43,6 +45,8 @@ class crawler(object):
             result.append(i.group('addr'))
 
         return result
+
+
 
 
 def init():
